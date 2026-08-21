@@ -192,7 +192,7 @@ export default function Landing({
           boxShadow: '0 20px 60px rgba(30,26,22,0.16)',
           border: '1px solid #E4DDD4'
         }}>
-            <img src={Children} style={{
+            <img src={childrenImg} style={{
             width: '100%',
             display: 'block'
           }} />
