@@ -6,7 +6,7 @@
 // of `import.meta.env` directly keeps this file valid CommonJS-compatible syntax that Jest
 // can actually execute — `import.meta` throws a SyntaxError outside a true ES module.
 
-const API_BASE_URL = typeof __API_BASE_URL__ !== 'undefined' ? __API_BASE_URL__ : 'http://localhost:4000/api';
+const API_BASE_URL = typeof __API_BASE_URL__ !== 'undefined' ? __API_BASE_URL__ : 'http://localhost:5000';
 export class ApiError extends Error {
   status;
   constructor(message, status) {

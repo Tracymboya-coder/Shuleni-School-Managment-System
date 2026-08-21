@@ -16,7 +16,8 @@ export default function CreateSchool({
     type: '',
     adminName: '',
     adminEmail: '',
-    password: ''
+    password: '',
+    confirmPassword: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -30,12 +31,16 @@ export default function CreateSchool({
       return;
     }
     setError('');
-    if (!form.adminName || !form.adminEmail || !form.password) {
-      setError('Please fill in your name, email, and password.');
+    if (!form.name || !form.subdomain || !form.adminName || !form.adminEmail || !form.password) {
+      setError('Please fill in all required school and admin details.');
       return;
     }
     if (form.password.length < 8) {
       setError('Password must be at least 8 characters.');
+      return;
+    }
+    if (form.password !== form.confirmPassword) {
+      setError('Passwords do not match.');
       return;
     }
     const result = await dispatch(createSchool({
@@ -469,7 +474,7 @@ export default function CreateSchool({
               color: '#3D3730',
               marginBottom: 6
             }}>Confirm password</label>
-                <input className="input-field" type="password" placeholder="Repeat your password" />
+                <input className="input-field" type="password" placeholder="Repeat your password" value={form.confirmPassword} onChange={e => set('confirmPassword', e.target.value)} />
               </div>
             </div>}
 
