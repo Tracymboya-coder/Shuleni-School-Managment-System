@@ -24,7 +24,7 @@ export default function CreateSchool({
   const set = (k, v) => setForm(p => ({
     ...p,
     [k]: v
-  }));
+  })); 
   const handleNext = async () => {
     if (step < steps.length - 1) {
       setStep(s => s + 1);
