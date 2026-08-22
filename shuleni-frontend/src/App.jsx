@@ -1,3 +1,4 @@
+import WeatherWidget from './components/WeatherWidget'
 import { useState } from 'react';
 import Layout from './components/Layout';
 import Landing from './screens/Landing';
@@ -34,6 +35,7 @@ export default function App() {
 
   // Shell-wrapped app screens
   return <Layout screen={screen} navigate={navigate} role={role}>
+      <WeatherWidget />
       {screen === 'admin-dashboard' && <AdminDashboard navigate={navigate} />}
       {screen === 'educator-dashboard' && <EducatorDashboard navigate={navigate} />}
       {screen === 'manage-users' && <ManageUsers />}
