@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ShieldCheck, BookOpen, GraduationCap, ArrowRight, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { login } from '../store/slices/authSlice';
 export default function Login({
@@ -10,24 +10,12 @@ export default function Login({
   const authStatus = useAppSelector(state => state.auth.status);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [subdomain, setSubdomain] = useState('makini');
-  const [loading, setLoading] = useState(false);
+  const [subdomain, setSubdomain] = useState('');
   const [error, setError] = useState('');
-  const quickLogin = role => {
-    setError('');
-    setLoading(true);
-    setTimeout(() => {
-      setRole(role);
-      setLoading(false);
-      if (role === 'student') navigate('student-dashboard');else if (role === 'educator') navigate('educator-dashboard');else navigate('admin-dashboard');
-    }, 700);
-  };
 
-  // Real sign-in against the Flask API. The demo buttons below (quickLogin) stay as a
-  // fast local-only shortcut for exploring the UI without a backend running.
   const handleSignIn = async () => {
-    if (!email || !password) {
-      setError('Please enter your email and password.');
+    if (!subdomain || !email || !password) {
+      setError('Please enter your school, email and password.');
       return;
     }
     setError('');
@@ -44,28 +32,6 @@ export default function Login({
       setError(result.payload || 'Could not sign in. Check your details and try again.');
     }
   };
-  const demoRoles = [{
-    role: 'admin',
-    label: 'School Owner / Manager',
-    sub: 'Alice Kamau · Makini Academy',
-    Icon: ShieldCheck,
-    color: '#C1440E',
-    bg: '#F4E4DC'
-  }, {
-    role: 'educator',
-    label: 'Educator',
-    sub: 'Ms. Grace Njeri · Form 3 East',
-    Icon: BookOpen,
-    color: '#2D6A4F',
-    bg: '#D4EDE2'
-  }, {
-    role: 'student',
-    label: 'Student',
-    sub: 'Brian Otieno · Form 3 East',
-    Icon: GraduationCap,
-    color: '#D4922A',
-    bg: '#FBF0D8'
-  }];
   return <div style={{
     minHeight: '100vh',
     background: '#FAF7F0',
@@ -198,7 +164,7 @@ export default function Login({
             fontSize: 14,
             color: '#1E1A16',
             background: 'transparent'
-          }} value={subdomain} onChange={e => setSubdomain(e.target.value)} />
+          }} placeholder="yourschool" value={subdomain} onChange={e => setSubdomain(e.target.value)} />
             <span style={{
             padding: '10px 14px',
             fontSize: 13,
@@ -271,83 +237,13 @@ export default function Login({
         padding: '12px',
         marginBottom: 18,
         marginTop: 8,
-        opacity: loading || authStatus === 'loading' ? 0.7 : 1
-      }} onClick={handleSignIn} disabled={loading || authStatus === 'loading'}>
+        opacity: authStatus === 'loading' ? 0.7 : 1
+      }} onClick={handleSignIn} disabled={authStatus === 'loading'}>
           {authStatus === 'loading' ? 'Signing in…' : 'Sign in'}
         </button>
 
-        <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 10,
-        marginBottom: 14
-      }}>
-          <div style={{
-          flex: 1,
-          height: 1,
-          background: '#E4DDD4'
-        }} />
-          <span style={{
-          fontSize: 12,
-          color: '#B5A99C'
-        }}>demo — sign in as</span>
-          <div style={{
-          flex: 1,
-          height: 1,
-          background: '#E4DDD4'
-        }} />
-        </div>
-
-        <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 8
-      }}>
-          {demoRoles.map(r => <button key={r.role} onClick={() => quickLogin(r.role)} disabled={loading} style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 12,
-          padding: '11px 14px',
-          borderRadius: 9,
-          border: `1.5px solid ${r.bg}`,
-          background: r.bg,
-          cursor: 'pointer',
-          textAlign: 'left',
-          transition: 'border-color 0.15s',
-          opacity: loading ? 0.6 : 1
-        }} onMouseEnter={e => e.currentTarget.style.borderColor = r.color} onMouseLeave={e => e.currentTarget.style.borderColor = r.bg}>
-              <div style={{
-            width: 32,
-            height: 32,
-            borderRadius: 8,
-            background: '#fff',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0
-          }}>
-                <r.Icon size={16} color={r.color} strokeWidth={1.8} />
-              </div>
-              <div style={{
-            flex: 1
-          }}>
-                <div style={{
-              fontFamily: "'Plus Jakarta Sans', sans-serif",
-              fontWeight: 600,
-              fontSize: 13,
-              color: '#1E1A16'
-            }}>{r.label}</div>
-                <div style={{
-              fontSize: 12,
-              color: '#6B6259'
-            }}>{r.sub}</div>
-              </div>
-              <ArrowRight size={14} color={r.color} />
-            </button>)}
-        </div>
-
         <p style={{
-        marginTop: 22,
+        marginTop: 6,
         textAlign: 'center',
         fontSize: 13,
         color: '#B5A99C'

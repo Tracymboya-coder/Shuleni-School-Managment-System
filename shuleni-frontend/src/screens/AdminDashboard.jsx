@@ -1,33 +1,7 @@
+import { useState, useEffect } from 'react';
 import { Users, School, ClipboardCheck, LayoutDashboard, Plus, FileText, FolderOpen, MessageSquare, TrendingUp } from 'lucide-react';
-const stats = [{
-  label: 'Total Students',
-  value: '847',
-  delta: '+12 this week',
-  Icon: Users,
-  color: '#C1440E',
-  bg: '#F4E4DC'
-}, {
-  label: 'Educators',
-  value: '52',
-  delta: '3 pending invite',
-  Icon: School,
-  color: '#2D6A4F',
-  bg: '#D4EDE2'
-}, {
-  label: "Today's Attendance",
-  value: '94.2%',
-  delta: '798 of 847 present',
-  Icon: ClipboardCheck,
-  color: '#D4922A',
-  bg: '#FBF0D8'
-}, {
-  label: 'Active Classes',
-  value: '24',
-  delta: 'Across 4 streams',
-  Icon: LayoutDashboard,
-  color: '#1A3A5C',
-  bg: '#D4E4F0'
-}];
+import { useAppSelector } from '../store/hooks';
+import { apiRequest } from '../store/api';
 const recentActivity = [{
   user: 'Ms. Grace Njeri',
   action: 'Submitted attendance',
@@ -145,6 +119,40 @@ const quickActions = [{
 export default function AdminDashboard({
   navigate
 }) {
+  const user = useAppSelector(state => state.auth.user);
+  const school = useAppSelector(state => state.auth.school);
+  const token = useAppSelector(state => state.auth.token);
+  const today = new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  const [counts, setCounts] = useState(null);
+  useEffect(() => {
+    let cancelled = false;
+    apiRequest('/school/dashboard', { token }).then(data => {
+      if (!cancelled) setCounts(data.counts);
+    }).catch(() => {});
+    return () => { cancelled = true; };
+  }, [token]);
+  const stats = [{
+    label: 'Total Students',
+    value: counts ? String(counts.students) : '—',
+    delta: '',
+    Icon: Users,
+    color: '#C1440E',
+    bg: '#F4E4DC'
+  }, {
+    label: 'Educators',
+    value: counts ? String(counts.educators) : '—',
+    delta: '',
+    Icon: School,
+    color: '#2D6A4F',
+    bg: '#D4EDE2'
+  }, {
+    label: 'Active Classes',
+    value: counts ? String(counts.classes) : '—',
+    delta: '',
+    Icon: LayoutDashboard,
+    color: '#1A3A5C',
+    bg: '#D4E4F0'
+  }];
   return <div style={{
     padding: '28px 32px',
     maxWidth: 1200,
@@ -163,11 +171,11 @@ export default function AdminDashboard({
           fontSize: 26,
           color: '#1E1A16',
           marginBottom: 4
-        }}>Good morning, Alice</h1>
+        }}>Good morning, {user?.name || 'there'}</h1>
           <p style={{
           fontSize: 14,
           color: '#6B6259'
-        }}>Monday, 20 January 2025 · Makini Academy, Nairobi</p>
+        }}>{today} · {school?.name || 'Your school'}</p>
         </div>
         <div style={{
         display: 'flex',
@@ -187,7 +195,7 @@ export default function AdminDashboard({
       {/* Stats */}
       <div style={{
       display: 'grid',
-      gridTemplateColumns: 'repeat(4, 1fr)',
+      gridTemplateColumns: 'repeat(3, 1fr)',
       gap: 16,
       marginBottom: 24
     }}>

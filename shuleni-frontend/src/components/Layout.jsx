@@ -1,4 +1,6 @@
 import { LayoutDashboard, Users, School, FolderOpen, ClipboardCheck, FileText, MessageSquare, LogOut, Bell, Search, ChevronRight, BarChart2, BookOpen, GraduationCap, ShieldCheck } from 'lucide-react';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { logout } from '../store/slices/authSlice';
 const adminNav = [{
   id: 'admin-dashboard',
   label: 'Overview',
@@ -141,45 +143,54 @@ const mobileStudentNav = [{
   label: 'Chat',
   Icon: MessageSquare
 }];
-const roleConfig = {
+const roleStyle = {
   admin: {
     label: 'School Owner',
-    name: 'Alice Kamau',
-    initials: 'AK',
     color: '#C1440E',
     Icon: ShieldCheck
   },
   educator: {
     label: 'Educator',
-    name: 'Ms. Grace Njeri',
-    initials: 'GN',
     color: '#2D6A4F',
     Icon: BookOpen
   },
   student: {
     label: 'Student',
-    name: 'Brian Otieno',
-    initials: 'BO',
     color: '#D4922A',
     Icon: GraduationCap
   }
 };
+function initialsFor(name) {
+  if (!name) return '';
+  const parts = name.trim().split(/\s+/);
+  const first = parts[0]?.[0] || '';
+  const last = parts.length > 1 ? parts[parts.length - 1][0] : '';
+  return (first + last).toUpperCase();
+}
 export default function Layout({
   screen,
   navigate,
   role,
   children
 }) {
+  const dispatch = useAppDispatch();
+  const { user, school } = useAppSelector(state => state.auth);
   const nav = role === 'admin' ? adminNav : role === 'educator' ? educatorNav : studentNav;
   const mobileNav = role === 'admin' ? mobileAdminNav : role === 'educator' ? mobileEducatorNav : mobileStudentNav;
-  const rc = roleConfig[role];
+  const rs = roleStyle[role];
+  const displayName = user?.name || '';
+  const initials = initialsFor(user?.name);
+  const schoolName = school?.name || '';
   const isActive = id => screen === id || id === 'classes' && screen === 'class-detail';
+  const handleSignOut = () => {
+    dispatch(logout());
+    navigate('login');
+  };
   return <div style={{
     display: 'flex',
     minHeight: '100vh',
     background: '#FAF7F0'
   }}>
-      {/* Desktop sidebar */}
       <aside style={{
       width: 216,
       minWidth: 216,
@@ -191,7 +202,6 @@ export default function Layout({
       position: 'sticky',
       top: 0
     }}>
-        {/* Logo */}
         <div style={{
         padding: '18px 18px 14px',
         borderBottom: '1px solid #F0EAE0'
@@ -230,12 +240,10 @@ export default function Layout({
               fontSize: 11,
               color: '#B5A99C',
               fontWeight: 500
-            }}>Makini Academy</div>
+            }}>{schoolName}</div>
             </div>
           </div>
         </div>
-
-        {/* Nav */}
         <nav style={{
         flex: 1,
         padding: '10px 8px',
@@ -257,40 +265,7 @@ export default function Layout({
                 {item.label}
               </div>;
         })}
-
-          <div style={{
-          fontSize: 10,
-          fontWeight: 700,
-          color: '#B5A99C',
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
-          padding: '10px 8px 4px',
-          marginTop: 6
-        }}>Demo roles</div>
-          {[{
-          r: 'admin',
-          label: 'School Owner',
-          Icon: ShieldCheck,
-          screen: 'admin-dashboard'
-        }, {
-          r: 'educator',
-          label: 'Educator',
-          Icon: BookOpen,
-          screen: 'educator-dashboard'
-        }, {
-          r: 'student',
-          label: 'Student',
-          Icon: GraduationCap,
-          screen: 'student-dashboard'
-        }].map(item => <div key={item.r} className={`sidebar-link ${role === item.r ? 'active' : ''}`} style={{
-          fontSize: 12
-        }} onClick={() => navigate(item.screen)}>
-              <item.Icon size={13} strokeWidth={1.8} />
-              {item.label}
-            </div>)}
         </nav>
-
-        {/* User */}
         <div style={{
         padding: '12px 14px',
         borderTop: '1px solid #F0EAE0',
@@ -302,7 +277,7 @@ export default function Layout({
           width: 30,
           height: 30,
           borderRadius: '50%',
-          background: rc.color,
+          background: rs.color,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -311,7 +286,7 @@ export default function Layout({
           color: '#fff',
           flexShrink: 0
         }}>
-            {rc.initials}
+            {initials}
           </div>
           <div style={{
           flex: 1,
@@ -324,13 +299,13 @@ export default function Layout({
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap'
-          }}>{rc.name}</div>
+          }}>{displayName}</div>
             <div style={{
             fontSize: 11,
             color: '#B5A99C'
-          }}>{rc.label}</div>
+          }}>{rs.label}</div>
           </div>
-          <button onClick={() => navigate('login')} title="Sign out" style={{
+          <button onClick={handleSignOut} title="Sign out" style={{
           background: 'none',
           border: 'none',
           cursor: 'pointer',
@@ -342,8 +317,6 @@ export default function Layout({
           </button>
         </div>
       </aside>
-
-      {/* Main */}
       <div style={{
       flex: 1,
       display: 'flex',
@@ -351,7 +324,6 @@ export default function Layout({
       minWidth: 0,
       maxWidth: 'calc(100vw - 216px)'
     }}>
-        {/* Top bar */}
         <header style={{
         background: '#fff',
         borderBottom: '1px solid #E4DDD4',
@@ -418,7 +390,7 @@ export default function Layout({
             width: 30,
             height: 30,
             borderRadius: '50%',
-            background: rc.color,
+            background: rs.color,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -427,11 +399,10 @@ export default function Layout({
             color: '#fff',
             cursor: 'pointer'
           }}>
-              {rc.initials}
+              {initials}
             </div>
           </div>
         </header>
-
         <main style={{
         flex: 1,
         overflowY: 'auto',
@@ -441,8 +412,6 @@ export default function Layout({
             {children}
           </div>
         </main>
-
-        {/* Mobile bottom nav */}
         <nav style={{
         position: 'fixed',
         bottom: 0,
