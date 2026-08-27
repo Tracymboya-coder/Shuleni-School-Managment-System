@@ -5,10 +5,11 @@ import { apiRequest, ApiError } from '../api';
 // sandbox restriction on window.storage; this is a normal Vite/React app.)
 const savedToken = typeof window !== 'undefined' ? localStorage.getItem('shuleni_token') : null;
 const savedUser = typeof window !== 'undefined' ? localStorage.getItem('shuleni_user') : null;
+const savedSchool = typeof window !== 'undefined' ? localStorage.getItem('shuleni_school') : null;
 const initialState = {
   token: savedToken,
   user: savedUser ? JSON.parse(savedUser) : null,
-  school: null,
+  school: savedSchool ? JSON.parse(savedSchool) : null,
   status: 'idle',
   error: null
 };
@@ -46,6 +47,7 @@ const authSlice = createSlice({
       state.school = null;
       localStorage.removeItem('shuleni_token');
       localStorage.removeItem('shuleni_user');
+      localStorage.removeItem('shuleni_school');
     },
     clearAuthError(state) {
       state.error = null;
@@ -61,6 +63,10 @@ const authSlice = createSlice({
       state.user = action.payload.user;
       localStorage.setItem('shuleni_token', action.payload.token);
       localStorage.setItem('shuleni_user', JSON.stringify(action.payload.user));
+      if (action.payload.school) {
+        state.school = action.payload.school;
+        localStorage.setItem('shuleni_school', JSON.stringify(action.payload.school));
+      }
     }).addCase(login.rejected, (state, action) => {
       state.status = 'failed';
       state.error = action.payload || 'Login failed';
@@ -70,8 +76,11 @@ const authSlice = createSlice({
     }).addCase(createSchool.fulfilled, (state, action) => {
       state.status = 'idle';
       state.token = action.payload.token;
+      state.user = action.payload.user;
       state.school = action.payload.school;
       localStorage.setItem('shuleni_token', action.payload.token);
+      localStorage.setItem('shuleni_user', JSON.stringify(action.payload.user));
+      localStorage.setItem('shuleni_school', JSON.stringify(action.payload.school));
     }).addCase(createSchool.rejected, (state, action) => {
       state.status = 'failed';
       state.error = action.payload || 'Could not create school';

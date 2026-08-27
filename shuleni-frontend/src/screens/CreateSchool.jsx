@@ -3,6 +3,19 @@ import { ImagePlus, ShieldCheck, AlertCircle } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { createSchool } from '../store/slices/authSlice';
 const steps = ['School details', 'Branding', 'Admin account'];
+
+function slugifyPart(str) {
+  return (str || '').toLowerCase().replace(/[^a-z0-9]+/g, '');
+}
+function buildEmail(fullName, roleSlug, schoolName) {
+  const parts = (fullName || '').trim().split(/\s+/).filter(Boolean);
+  const first = slugifyPart(parts[0]);
+  const last = parts.length > 1 ? slugifyPart(parts[parts.length - 1]) : '';
+  const namePart = last ? `${first}.${last}` : first;
+  const school = slugifyPart(schoolName);
+  if (!namePart || !school) return '';
+  return `${namePart}@${roleSlug}.${school}.com`;
+}
 export default function CreateSchool({
   navigate
 }) {
@@ -25,14 +38,15 @@ export default function CreateSchool({
     ...p,
     [k]: v
   }));
+  const generatedEmail = buildEmail(form.adminName, 'schoolowner', form.name);
   const handleNext = async () => {
     if (step < steps.length - 1) {
       setStep(s => s + 1);
       return;
     }
     setError('');
-    if (!form.name || !form.subdomain || !form.adminName || !form.adminEmail || !form.password) {
-      setError('Please fill in all required school and admin details.');
+    if (!form.name || !form.subdomain || !form.adminName || !generatedEmail || !form.password) {
+      setError('Please fill in all required school and admin details, including your full first and last name.');
       return;
     }
     if (form.password.length < 8) {
@@ -49,7 +63,7 @@ export default function CreateSchool({
       county: form.county || undefined,
       type: form.type || undefined,
       adminName: form.adminName,
-      adminEmail: form.adminEmail,
+      adminEmail: generatedEmail,
       password: form.password
     }));
     if (createSchool.fulfilled.match(result)) {
@@ -58,7 +72,7 @@ export default function CreateSchool({
       setError(result.payload || 'Could not create your school. Please try again.');
     }
   };
-  const counties = ['Nairobi', 'Mombasa', 'Kisumu', 'Nakuru', 'Eldoret', 'Thika', 'Machakos', 'Meru', 'Nyeri', 'Kakamega'];
+  const counties = ['Narok', 'Nairobi', 'Mombasa', 'Kisumu', 'Nakuru', 'Eldoret', 'Thika', 'Machakos', 'Meru', 'Nyeri', 'Kakamega'];
   const types = ['National School', 'County School', 'Sub-County School', 'Private School', 'International School'];
   return <div style={{
     minHeight: '100vh',
@@ -453,8 +467,10 @@ export default function CreateSchool({
               fontWeight: 600,
               color: '#3D3730',
               marginBottom: 6
-            }}>Email address</label>
-                <input className="input-field" type="email" placeholder="alice@school.ac.ke" value={form.adminEmail} onChange={e => set('adminEmail', e.target.value)} />
+            }}>Email address (generated automatically)</label>
+                <div className="input-field" style={{ background: '#F0EAE0', color: generatedEmail ? '#1E1A16' : '#B5A99C', display: 'flex', alignItems: 'center' }}>
+                  {generatedEmail || 'Enter your full name and school name first…'}
+                </div>
               </div>
               <div>
                 <label style={{
