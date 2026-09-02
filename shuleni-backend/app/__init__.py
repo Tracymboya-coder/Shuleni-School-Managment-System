@@ -8,11 +8,16 @@ def create_app(config_object=Config):
     app = Flask(__name__)
     app.config.from_object(config_object)
 
+    origins = os.environ.get("CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173")
+    cors.init_app(
+        app,
+        resources={r"/api/*": {"origins": [origin.strip() for origin in origins.split(",") if origin.strip()]}}
+    )
+
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
     bcrypt.init_app(app)
-    cors.init_app(app)  # dev-friendly default (allow all origins); restrict in production
 
     # Import models so Flask-Migrate can detect them
     from app import models  # noqa: F401

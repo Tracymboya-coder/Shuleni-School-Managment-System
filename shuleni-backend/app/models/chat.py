@@ -1,4 +1,4 @@
-```python
+
 from app.extensions import db
 from app.models.base import gen_id, TimestampMixin
 
@@ -33,4 +33,3 @@ class ChatMessage(TimestampMixin, db.Model):
                 "role": self.sender.role,
             },
         }
-```
