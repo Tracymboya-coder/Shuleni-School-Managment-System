@@ -16,8 +16,7 @@ export default defineConfig({
     },
   },
   // Exposes a stable global the app can read at runtime, independent of Vite's
-  // import.meta.env — this is what lets api.js work identically under Vite (browser)
-  // and Jest (Node/CommonJS), where `import.meta` isn't valid syntax.
+  // import.meta.env — this keeps shared API modules consistent across environments.
   define: {
     __API_BASE_URL__: JSON.stringify(process.env.VITE_API_URL || 'http://localhost:4000/api'),
   },

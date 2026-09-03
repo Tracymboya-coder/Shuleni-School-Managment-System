@@ -17,6 +17,7 @@ import ClassChat from './screens/ClassChat';
 import StudentDashboard from './screens/StudentDashboard';
 import StudentAttendance from './screens/StudentAttendance';
 import StudentResults from './screens/StudentResults';
+
 export default function App() {
   const [screen, setScreen] = useState('landing');
   const [role, setRole] = useState('admin');

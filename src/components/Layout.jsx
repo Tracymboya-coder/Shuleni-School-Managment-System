@@ -1,483 +1,236 @@
-import { LayoutDashboard, Users, School, FolderOpen, ClipboardCheck, FileText, MessageSquare, LogOut, Bell, Search, ChevronRight, BarChart2, BookOpen, GraduationCap, ShieldCheck } from 'lucide-react';
-const adminNav = [{
-  id: 'admin-dashboard',
-  label: 'Overview',
-  Icon: LayoutDashboard
-}, {
-  id: 'manage-users',
-  label: 'People',
-  Icon: Users
-}, {
-  id: 'classes',
-  label: 'Classes',
-  Icon: School
-}, {
-  id: 'resources',
-  label: 'Resources',
-  Icon: FolderOpen
-}, {
-  id: 'attendance',
-  label: 'Attendance',
-  Icon: ClipboardCheck
-}, {
-  id: 'exam-builder',
-  label: 'Exams',
-  Icon: FileText
-}, {
-  id: 'class-chat',
-  label: 'Class Chat',
-  Icon: MessageSquare
-}];
-const educatorNav = [{
-  id: 'educator-dashboard',
-  label: 'Dashboard',
-  Icon: LayoutDashboard
-}, {
-  id: 'classes',
-  label: 'Classes',
-  Icon: School
-}, {
-  id: 'resources',
-  label: 'Resources',
-  Icon: FolderOpen
-}, {
-  id: 'attendance',
-  label: 'Attendance',
-  Icon: ClipboardCheck
-}, {
-  id: 'exam-builder',
-  label: 'Exams',
-  Icon: FileText
-}, {
-  id: 'class-chat',
-  label: 'Class Chat',
-  Icon: MessageSquare
-}];
-const studentNav = [{
-  id: 'student-dashboard',
-  label: 'Dashboard',
-  Icon: LayoutDashboard
-}, {
-  id: 'resources',
-  label: 'Resources',
-  Icon: FolderOpen
-}, {
-  id: 'exam-student',
-  label: 'Assessments',
-  Icon: FileText
-}, {
-  id: 'student-attendance',
-  label: 'My Attendance',
-  Icon: ClipboardCheck
-}, {
-  id: 'student-results',
-  label: 'My Results',
-  Icon: BarChart2
-}, {
-  id: 'class-chat',
-  label: 'Class Chat',
-  Icon: MessageSquare
-}];
-const mobileAdminNav = [{
-  id: 'admin-dashboard',
-  label: 'Home',
-  Icon: LayoutDashboard
-}, {
-  id: 'classes',
-  label: 'Classes',
-  Icon: School
-}, {
-  id: 'attendance',
-  label: 'Attend.',
-  Icon: ClipboardCheck
-}, {
-  id: 'exam-builder',
-  label: 'Exams',
-  Icon: FileText
-}, {
-  id: 'class-chat',
-  label: 'Chat',
-  Icon: MessageSquare
-}];
-const mobileEducatorNav = [{
-  id: 'educator-dashboard',
-  label: 'Home',
-  Icon: LayoutDashboard
-}, {
-  id: 'classes',
-  label: 'Classes',
-  Icon: School
-}, {
-  id: 'attendance',
-  label: 'Attend.',
-  Icon: ClipboardCheck
-}, {
-  id: 'exam-builder',
-  label: 'Exams',
-  Icon: FileText
-}, {
-  id: 'class-chat',
-  label: 'Chat',
-  Icon: MessageSquare
-}];
-const mobileStudentNav = [{
-  id: 'student-dashboard',
-  label: 'Home',
-  Icon: LayoutDashboard
-}, {
-  id: 'resources',
-  label: 'Resources',
-  Icon: FolderOpen
-}, {
-  id: 'exam-student',
-  label: 'Exams',
-  Icon: FileText
-}, {
-  id: 'student-results',
-  label: 'Results',
-  Icon: BarChart2
-}, {
-  id: 'class-chat',
-  label: 'Chat',
-  Icon: MessageSquare
-}];
+import {
+  LayoutDashboard,
+  Users,
+  School,
+  FolderOpen,
+  ClipboardCheck,
+  FileText,
+  MessageSquare,
+  LogOut,
+  Bell,
+  Search,
+  BarChart2,
+  BookOpen,
+  GraduationCap,
+  ShieldCheck,
+} from 'lucide-react';
+
+const adminNav = [
+  { id: 'admin-dashboard', label: 'Overview', Icon: LayoutDashboard },
+  { id: 'manage-users', label: 'People', Icon: Users },
+  { id: 'classes', label: 'Classes', Icon: School },
+  { id: 'resources', label: 'Resources', Icon: FolderOpen },
+  { id: 'attendance', label: 'Attendance', Icon: ClipboardCheck },
+  { id: 'exam-builder', label: 'Exams', Icon: FileText },
+  { id: 'class-chat', label: 'Class Chat', Icon: MessageSquare },
+];
+
+const educatorNav = [
+  { id: 'educator-dashboard', label: 'Dashboard', Icon: LayoutDashboard },
+  { id: 'classes', label: 'Classes', Icon: School },
+  { id: 'resources', label: 'Resources', Icon: FolderOpen },
+  { id: 'attendance', label: 'Attendance', Icon: ClipboardCheck },
+  { id: 'exam-builder', label: 'Exams', Icon: FileText },
+  { id: 'class-chat', label: 'Class Chat', Icon: MessageSquare },
+];
+
+const studentNav = [
+  { id: 'student-dashboard', label: 'Dashboard', Icon: LayoutDashboard },
+  { id: 'resources', label: 'Resources', Icon: FolderOpen },
+  { id: 'exam-student', label: 'Assessments', Icon: FileText },
+  { id: 'student-attendance', label: 'My Attendance', Icon: ClipboardCheck },
+  { id: 'student-results', label: 'My Results', Icon: BarChart2 },
+  { id: 'class-chat', label: 'Class Chat', Icon: MessageSquare },
+];
+
+const mobileAdminNav = [
+  { id: 'admin-dashboard', label: 'Home', Icon: LayoutDashboard },
+  { id: 'classes', label: 'Classes', Icon: School },
+  { id: 'attendance', label: 'Attend.', Icon: ClipboardCheck },
+  { id: 'exam-builder', label: 'Exams', Icon: FileText },
+  { id: 'class-chat', label: 'Chat', Icon: MessageSquare },
+];
+
+const mobileEducatorNav = [
+  { id: 'educator-dashboard', label: 'Home', Icon: LayoutDashboard },
+  { id: 'classes', label: 'Classes', Icon: School },
+  { id: 'attendance', label: 'Attend.', Icon: ClipboardCheck },
+  { id: 'exam-builder', label: 'Exams', Icon: FileText },
+  { id: 'class-chat', label: 'Chat', Icon: MessageSquare },
+];
+
+const mobileStudentNav = [
+  { id: 'student-dashboard', label: 'Home', Icon: LayoutDashboard },
+  { id: 'resources', label: 'Resources', Icon: FolderOpen },
+  { id: 'exam-student', label: 'Exams', Icon: FileText },
+  { id: 'student-results', label: 'Results', Icon: BarChart2 },
+  { id: 'class-chat', label: 'Chat', Icon: MessageSquare },
+];
+
 const roleConfig = {
-  admin: {
-    label: 'School Owner',
-    name: 'Alice Kamau',
-    initials: 'AK',
-    color: '#C1440E',
-    Icon: ShieldCheck
-  },
-  educator: {
-    label: 'Educator',
-    name: 'Ms. Grace Njeri',
-    initials: 'GN',
-    color: '#2D6A4F',
-    Icon: BookOpen
-  },
-  student: {
-    label: 'Student',
-    name: 'Brian Otieno',
-    initials: 'BO',
-    color: '#D4922A',
-    Icon: GraduationCap
-  }
+  admin: { label: 'School Owner', name: 'Alice Kamau', initials: 'AK', accent: '#FF6B00' },
+  educator: { label: 'Educator', name: 'Ms. Grace Njeri', initials: 'GN', accent: '#16A34A' },
+  student: { label: 'Student', name: 'Brian Otieno', initials: 'BO', accent: '#F59E0B' },
 };
-export default function Layout({
-  screen,
-  navigate,
-  role,
-  children
-}) {
+
+const roleOptions = [
+  { role: 'admin', label: 'School Owner', Icon: ShieldCheck, screen: 'admin-dashboard' },
+  { role: 'educator', label: 'Educator', Icon: BookOpen, screen: 'educator-dashboard' },
+  { role: 'student', label: 'Student', Icon: GraduationCap, screen: 'student-dashboard' },
+];
+
+export default function Layout({ screen, navigate, role, children }) {
   const nav = role === 'admin' ? adminNav : role === 'educator' ? educatorNav : studentNav;
   const mobileNav = role === 'admin' ? mobileAdminNav : role === 'educator' ? mobileEducatorNav : mobileStudentNav;
   const rc = roleConfig[role];
-  const isActive = id => screen === id || id === 'classes' && screen === 'class-detail';
-  return <div style={{
-    display: 'flex',
-    minHeight: '100vh',
-    background: '#FAF7F0'
-  }}>
-      {/* Desktop sidebar */}
-      <aside style={{
-      width: 216,
-      minWidth: 216,
-      background: '#fff',
-      borderRight: '1px solid #E4DDD4',
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100vh',
-      position: 'sticky',
-      top: 0
-    }}>
-        {/* Logo */}
-        <div style={{
-        padding: '18px 18px 14px',
-        borderBottom: '1px solid #F0EAE0'
-      }}>
-          <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 9
-        }}>
-            <div style={{
-            width: 32,
-            height: 32,
-            borderRadius: 8,
-            background: '#C1440E',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0
-          }}>
-              <span style={{
-              color: '#fff',
-              fontFamily: "'Plus Jakarta Sans', sans-serif",
-              fontWeight: 800,
-              fontSize: 15
-            }}>S</span>
+  const isActive = id => screen === id || (id === 'classes' && screen === 'class-detail');
+
+  return (
+    <div className="flex min-h-dvh bg-forest">
+      <aside className="app-sidebar">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+          style={{ background: 'radial-gradient(ellipse at 30% 20%, rgba(255,107,0,0.06) 0%, transparent 60%)' }}
+        />
+
+        <div className="relative border-b border-white/[0.06] px-[18px] pb-4 pt-5">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-gradient-to-br from-flame to-[#FF9B4A] shadow-[0_4px_14px_rgba(255,107,0,0.4)]">
+              <span className="font-sans text-[17px] font-black tracking-[-0.03em] text-white">S</span>
             </div>
             <div>
-              <div style={{
-              fontFamily: "'Plus Jakarta Sans', sans-serif",
-              fontWeight: 700,
-              fontSize: 14,
-              color: '#1E1A16',
-              lineHeight: 1.1
-            }}>Shuleni</div>
-              <div style={{
-              fontSize: 11,
-              color: '#B5A99C',
-              fontWeight: 500
-            }}>Makini Academy</div>
+              <div className="font-sans text-[17px] font-extrabold leading-none tracking-[-0.02em] text-ink">Shuleni</div>
+              <div className="mt-0.5 text-[11px] font-medium text-flame/80">Makini Academy</div>
             </div>
           </div>
         </div>
 
-        {/* Nav */}
-        <nav style={{
-        flex: 1,
-        padding: '10px 8px',
-        overflowY: 'auto'
-      }}>
-          <div style={{
-          fontSize: 10,
-          fontWeight: 700,
-          color: '#B5A99C',
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
-          padding: '0 8px',
-          marginBottom: 4
-        }}>Navigation</div>
+        <nav aria-label="Primary navigation" className="relative flex-1 overflow-y-auto px-2.5 py-3">
+          <div className="mb-1.5 px-2 text-[10px] font-bold uppercase tracking-[0.1em] text-white/25">Menu</div>
           {nav.map(item => {
-          const active = isActive(item.id);
-          return <div key={item.id} className={`sidebar-link ${active ? 'active' : ''}`} onClick={() => navigate(item.id)}>
-                <item.Icon size={15} strokeWidth={active ? 2.2 : 1.8} />
-                {item.label}
-              </div>;
-        })}
+            const active = isActive(item.id);
+            return (
+              <button
+                key={item.id}
+                type="button"
+                className={`sidebar-link w-full ${active ? 'active' : ''}`}
+                aria-current={active ? 'page' : undefined}
+                onClick={() => navigate(item.id)}
+              >
+                <item.Icon size={16} strokeWidth={active ? 2.2 : 1.7} />
+                <span>{item.label}</span>
+                {active && <span aria-hidden="true" className="ml-auto h-[5px] w-[5px] rounded-full bg-flame" />}
+              </button>
+            );
+          })}
 
-          <div style={{
-          fontSize: 10,
-          fontWeight: 700,
-          color: '#B5A99C',
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
-          padding: '10px 8px 4px',
-          marginTop: 6
-        }}>Demo roles</div>
-          {[{
-          r: 'admin',
-          label: 'School Owner',
-          Icon: ShieldCheck,
-          screen: 'admin-dashboard'
-        }, {
-          r: 'educator',
-          label: 'Educator',
-          Icon: BookOpen,
-          screen: 'educator-dashboard'
-        }, {
-          r: 'student',
-          label: 'Student',
-          Icon: GraduationCap,
-          screen: 'student-dashboard'
-        }].map(item => <div key={item.r} className={`sidebar-link ${role === item.r ? 'active' : ''}`} style={{
-          fontSize: 12
-        }} onClick={() => navigate(item.screen)}>
+          <div className="mt-2 border-t border-white/[0.05] px-2 pb-1 pt-3 text-[10px] font-bold uppercase tracking-[0.1em] text-white/20">
+            Switch role
+          </div>
+          {roleOptions.map(item => (
+            <button
+              key={item.role}
+              type="button"
+              className={`sidebar-link w-full !py-[7px] text-xs ${role === item.role ? 'active' : ''}`}
+              aria-pressed={role === item.role}
+              onClick={() => navigate(item.screen)}
+            >
               <item.Icon size={13} strokeWidth={1.8} />
-              {item.label}
-            </div>)}
+              <span>{item.label}</span>
+            </button>
+          ))}
         </nav>
 
-        {/* User */}
-        <div style={{
-        padding: '12px 14px',
-        borderTop: '1px solid #F0EAE0',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 9
-      }}>
-          <div style={{
-          width: 30,
-          height: 30,
-          borderRadius: '50%',
-          background: rc.color,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: 11,
-          fontWeight: 700,
-          color: '#fff',
-          flexShrink: 0
-        }}>
-            {rc.initials}
+        <div className="relative border-t border-white/[0.06] px-3.5 py-3">
+          <div className="flex items-center gap-2.5">
+            <div
+              className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[10px] font-sans text-xs font-extrabold text-white"
+              style={{ background: rc.accent }}
+            >
+              {rc.initials}
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="truncate font-sans text-[13px] font-semibold text-ink">{rc.name}</div>
+              <div className="text-[11px] text-white/35">{rc.label}</div>
+            </div>
+            <button
+              type="button"
+              aria-label="Sign out"
+              title="Sign out"
+              className="flex min-h-11 min-w-11 items-center justify-center rounded-md border-0 bg-transparent p-2 text-white/40 transition-colors hover:text-white/80"
+              onClick={() => navigate('login')}
+            >
+              <LogOut size={15} strokeWidth={1.8} />
+            </button>
           </div>
-          <div style={{
-          flex: 1,
-          minWidth: 0
-        }}>
-            <div style={{
-            fontSize: 12,
-            fontWeight: 600,
-            color: '#1E1A16',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap'
-          }}>{rc.name}</div>
-            <div style={{
-            fontSize: 11,
-            color: '#B5A99C'
-          }}>{rc.label}</div>
-          </div>
-          <button onClick={() => navigate('login')} title="Sign out" style={{
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          color: '#B5A99C',
-          display: 'flex',
-          padding: 2
-        }}>
-            <LogOut size={14} strokeWidth={1.8} />
-          </button>
         </div>
       </aside>
 
-      {/* Main */}
-      <div style={{
-      flex: 1,
-      display: 'flex',
-      flexDirection: 'column',
-      minWidth: 0,
-      maxWidth: 'calc(100vw - 216px)'
-    }}>
-        {/* Top bar */}
-        <header style={{
-        background: '#fff',
-        borderBottom: '1px solid #E4DDD4',
-        padding: '0 24px',
-        height: 54,
-        display: 'flex',
-        alignItems: 'center',
-        gap: 14,
-        position: 'sticky',
-        top: 0,
-        zIndex: 10
-      }}>
-          <div style={{
-          flex: 1
-        }}>
-            <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 7,
-            background: '#FAF7F0',
-            border: '1.5px solid #E4DDD4',
-            borderRadius: 8,
-            padding: '6px 12px',
-            maxWidth: 320
-          }}>
-              <Search size={13} color="#B5A99C" strokeWidth={2} />
-              <input placeholder="Search…" style={{
-              border: 'none',
-              background: 'transparent',
-              outline: 'none',
-              fontSize: 13,
-              color: '#1E1A16',
-              width: '100%'
-            }} />
+      <div className="app-main">
+        <header className="app-topbar">
+          <div className="flex-1">
+            <label className="sr-only" htmlFor="global-search">Search people, classes, and exams</label>
+            <div className="app-topbar-search flex max-w-[300px] items-center gap-2 rounded-[10px] border-[1.5px] border-border bg-[#F8F5F0] px-3.5 py-[7px] transition-colors focus-within:border-flame">
+              <Search size={13} color="#B8A898" strokeWidth={2} aria-hidden="true" />
+              <input
+                id="global-search"
+                aria-label="Search people, classes, and exams"
+                className="w-full border-0 bg-transparent text-[13px] text-charcoal outline-none placeholder:text-[#B8A898]"
+                placeholder="Search people, classes, exams…"
+              />
             </div>
           </div>
-          <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 10
-        }}>
-            <button style={{
-            position: 'relative',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            color: '#6B6259',
-            display: 'flex',
-            padding: 2
-          }}>
-              <Bell size={18} strokeWidth={1.8} />
-              <span style={{
-              position: 'absolute',
-              top: 0,
-              right: 0,
-              width: 7,
-              height: 7,
-              background: '#C1440E',
-              borderRadius: '50%',
-              border: '1.5px solid #fff'
-            }} />
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              aria-label="View notifications"
+              className="relative flex min-h-11 min-w-11 items-center justify-center rounded-[10px] border-0 bg-flame-light text-flame transition-colors hover:bg-[#FFE5CC]"
+            >
+              <Bell size={16} strokeWidth={2} />
+              <span aria-hidden="true" className="absolute right-[9px] top-[9px] h-[7px] w-[7px] rounded-full border-[1.5px] border-white bg-flame" />
             </button>
-            <div style={{
-            width: 30,
-            height: 30,
-            borderRadius: '50%',
-            background: rc.color,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: 11,
-            fontWeight: 700,
-            color: '#fff',
-            cursor: 'pointer'
-          }}>
-              {rc.initials}
+            <div className="flex cursor-pointer items-center gap-2" aria-label={`${rc.name}, ${rc.label}`}>
+              <div
+                className="flex h-[34px] w-[34px] items-center justify-center rounded-[10px] font-sans text-xs font-extrabold text-white"
+                style={{ background: rc.accent }}
+              >
+                {rc.initials}
+              </div>
+              <div className="app-topbar-user-copy">
+                <div className="font-sans text-[13px] font-semibold leading-[1.1] text-charcoal">
+                  {rc.name.split(' ')[0]} {rc.name.split(' ')[1]?.[0]}.
+                </div>
+                <div className="text-[11px] text-ink-muted">{rc.label}</div>
+              </div>
             </div>
           </div>
         </header>
 
-        <main style={{
-        flex: 1,
-        overflowY: 'auto',
-        paddingBottom: 72
-      }}>
-          <div className="fade-in">
-            {children}
-          </div>
+        <main className="app-main-content">
+          <div className="fade-in">{children}</div>
         </main>
 
-        {/* Mobile bottom nav */}
-        <nav style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 216,
-        right: 0,
-        background: '#fff',
-        borderTop: '1px solid #E4DDD4',
-        display: 'flex',
-        height: 58,
-        zIndex: 10
-      }}>
+        <nav aria-label="Mobile navigation" className="app-mobile-nav">
           {mobileNav.map(item => {
-          const active = isActive(item.id);
-          return <button key={item.id} onClick={() => navigate(item.id)} style={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 3,
-            border: 'none',
-            background: 'none',
-            cursor: 'pointer',
-            padding: '6px 4px'
-          }}>
-                <item.Icon size={18} strokeWidth={active ? 2.2 : 1.7} color={active ? '#C1440E' : '#B5A99C'} />
-                <span style={{
-              fontSize: 10,
-              fontWeight: active ? 700 : 500,
-              color: active ? '#C1440E' : '#B5A99C',
-              lineHeight: 1
-            }}>{item.label}</span>
-              </button>;
-        })}
+            const active = isActive(item.id);
+            return (
+              <button
+                key={item.id}
+                type="button"
+                aria-current={active ? 'page' : undefined}
+                onClick={() => navigate(item.id)}
+                className="flex min-w-0 flex-1 flex-col items-center justify-center gap-1 border-0 bg-transparent px-1.5 py-1.5"
+              >
+                <item.Icon size={18} strokeWidth={active ? 2.2 : 1.6} color={active ? '#FF6B00' : 'rgba(255,255,255,0.3)'} />
+                <span className={`font-sans text-[10px] leading-none ${active ? 'font-bold text-flame' : 'font-medium text-white/30'}`}>
+                  {item.label}
+                </span>
+              </button>
+            );
+          })}
         </nav>
       </div>
-    </div>;
+    </div>
+  );
 }

@@ -1,41 +1,51 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { apiRequest, ApiError } from '../api';
-// Restore session from localStorage so a page refresh doesn't log the user out.
-// (This is plain localStorage on the app's own domain — unrelated to the artifact
-// sandbox restriction on window.storage; this is a normal Vite/React app.)
-const savedToken = typeof window !== 'undefined' ? localStorage.getItem('shuleni_token') : null;
-const savedUser = typeof window !== 'undefined' ? localStorage.getItem('shuleni_user') : null;
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { ApiError, apiRequest } from '../api';
+
+const TOKEN_KEY = 'shuleni_token';
+const USER_KEY = 'shuleni_user';
+const storage = typeof window === 'undefined' ? null : window.localStorage;
+
 const initialState = {
-  token: savedToken,
-  user: savedUser ? JSON.parse(savedUser) : null,
+  token: storage?.getItem(TOKEN_KEY) ?? null,
+  user: JSON.parse(storage?.getItem(USER_KEY) || 'null'),
   school: null,
   status: 'idle',
-  error: null
+  error: null,
 };
-export const login = createAsyncThunk('auth/login', async (payload, {
-  rejectWithValue
-}) => {
-  try {
-    return await apiRequest('/auth/login', {
-      method: 'POST',
-      body: payload
-    });
-  } catch (err) {
-    return rejectWithValue(err instanceof ApiError ? err.message : 'Login failed');
-  }
-});
-export const createSchool = createAsyncThunk('auth/createSchool', async (payload, {
-  rejectWithValue
-}) => {
-  try {
-    return await apiRequest('/auth/create-school', {
-      method: 'POST',
-      body: payload
-    });
-  } catch (err) {
-    return rejectWithValue(err instanceof ApiError ? err.message : 'Could not create school');
-  }
-});
+
+const postAuth = (type, path, fallback) => createAsyncThunk(
+  type,
+  async (payload, { rejectWithValue }) => {
+    try {
+      return await apiRequest(path, { method: 'POST', body: payload });
+    } catch (error) {
+      return rejectWithValue(error instanceof ApiError ? error.message : fallback);
+    }
+  },
+);
+
+export const login = postAuth('auth/login', '/auth/login', 'Login failed');
+export const createSchool = postAuth(
+  'auth/createSchool',
+  '/auth/create-school',
+  'Could not create school',
+);
+
+const saveSession = (token, user) => {
+  storage?.setItem(TOKEN_KEY, token);
+  if (user) storage?.setItem(USER_KEY, JSON.stringify(user));
+};
+
+const setLoading = state => {
+  state.status = 'loading';
+  state.error = null;
+};
+
+const setError = fallback => (state, action) => {
+  state.status = 'failed';
+  state.error = action.payload || fallback;
+};
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -44,42 +54,33 @@ const authSlice = createSlice({
       state.token = null;
       state.user = null;
       state.school = null;
-      localStorage.removeItem('shuleni_token');
-      localStorage.removeItem('shuleni_user');
+      storage?.removeItem(TOKEN_KEY);
+      storage?.removeItem(USER_KEY);
     },
     clearAuthError(state) {
       state.error = null;
-    }
+    },
   },
   extraReducers: builder => {
-    builder.addCase(login.pending, state => {
-      state.status = 'loading';
-      state.error = null;
-    }).addCase(login.fulfilled, (state, action) => {
-      state.status = 'idle';
-      state.token = action.payload.token;
-      state.user = action.payload.user;
-      localStorage.setItem('shuleni_token', action.payload.token);
-      localStorage.setItem('shuleni_user', JSON.stringify(action.payload.user));
-    }).addCase(login.rejected, (state, action) => {
-      state.status = 'failed';
-      state.error = action.payload || 'Login failed';
-    }).addCase(createSchool.pending, state => {
-      state.status = 'loading';
-      state.error = null;
-    }).addCase(createSchool.fulfilled, (state, action) => {
-      state.status = 'idle';
-      state.token = action.payload.token;
-      state.school = action.payload.school;
-      localStorage.setItem('shuleni_token', action.payload.token);
-    }).addCase(createSchool.rejected, (state, action) => {
-      state.status = 'failed';
-      state.error = action.payload || 'Could not create school';
-    });
-  }
+    builder
+      .addCase(login.pending, setLoading)
+      .addCase(createSchool.pending, setLoading)
+      .addCase(login.fulfilled, (state, { payload }) => {
+        state.status = 'idle';
+        state.token = payload.token;
+        state.user = payload.user;
+        saveSession(payload.token, payload.user);
+      })
+      .addCase(createSchool.fulfilled, (state, { payload }) => {
+        state.status = 'idle';
+        state.token = payload.token;
+        state.school = payload.school;
+        storage?.setItem(TOKEN_KEY, payload.token);
+      })
+      .addCase(login.rejected, setError('Login failed'))
+      .addCase(createSchool.rejected, setError('Could not create school'));
+  },
 });
-export const {
-  logout,
-  clearAuthError
-} = authSlice.actions;
+
+export const { logout, clearAuthError } = authSlice.actions;
 export default authSlice.reducer;
