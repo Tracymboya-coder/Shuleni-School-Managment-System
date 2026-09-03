@@ -1,0 +1,70 @@
+[1mdiff --git a/shuleni-frontend/src/screens/CreateSchool.jsx b/shuleni-frontend/src/screens/CreateSchool.jsx[m
+[1mindex 4be33e1..0c07dcf 100644[m
+[1m--- a/shuleni-frontend/src/screens/CreateSchool.jsx[m
+[1m+++ b/shuleni-frontend/src/screens/CreateSchool.jsx[m
+[36m@@ -16,7 +16,8 @@[m [mexport default function CreateSchool({[m
+     type: '',[m
+     adminName: '',[m
+     adminEmail: '',[m
+[31m-    password: ''[m
+[32m+[m[32m    password: '',[m
+[32m+[m[32m    confirmPassword: ''[m
+   });[m
+   const [loading, setLoading] = useState(false);[m
+   const [error, setError] = useState('');[m
+[36m@@ -30,14 +31,18 @@[m [mexport default function CreateSchool({[m
+       return;[m
+     }[m
+     setError('');[m
+[31m-    if (!form.adminName || !form.adminEmail || !form.password) {[m
+[31m-      setError('Please fill in your name, email, and password.');[m
+[32m+[m[32m    if (!form.name || !form.subdomain || !form.adminName || !form.adminEmail || !form.password) {[m
+[32m+[m[32m      setError('Please fill in all required school and admin details.');[m
+       return;[m
+     }[m
+     if (form.password.length < 8) {[m
+       setError('Password must be at least 8 characters.');[m
+       return;[m
+     }[m
+[32m+[m[32m    if (form.password !== form.confirmPassword) {[m
+[32m+[m[32m      setError('Passwords do not match.');[m
+[32m+[m[32m      return;[m
+[32m+[m[32m    }[m
+     const result = await dispatch(createSchool({[m
+       schoolName: form.name,[m
+       subdomain: form.subdomain,[m
+[36m@@ -469,7 +474,7 @@[m [mexport default function CreateSchool({[m
+               color: '#3D3730',[m
+               marginBottom: 6[m
+             }}>Confirm password</label>[m
+[31m-                <input className="input-field" type="password" placeholder="Repeat your password" />[m
+[32m+[m[32m                <input className="input-field" type="password" placeholder="Repeat your password" value={form.confirmPassword} onChange={e => set('confirmPassword', e.target.value)} />[m
+               </div>[m
+             </div>}[m
+ [m
+[1mdiff --git a/shuleni-frontend/src/store/api.js b/shuleni-frontend/src/store/api.js[m
+[1mindex c6ccb43..0f37b7c 100644[m
+[1m--- a/shuleni-frontend/src/store/api.js[m
+[1m+++ b/shuleni-frontend/src/store/api.js[m
+[36m@@ -6,7 +6,7 @@[m
+ // of `import.meta.env` directly keeps this file valid CommonJS-compatible syntax that Jest[m
+ // can actually execute — `import.meta` throws a SyntaxError outside a true ES module.[m
+ [m
+[31m-const API_BASE_URL = typeof __API_BASE_URL__ !== 'undefined' ? __API_BASE_URL__ : 'http://localhost:4000/api';[m
+[32m+[m[32mconst API_BASE_URL = typeof __API_BASE_URL__ !== 'undefined' ? __API_BASE_URL__ : 'http://localhost:5000';[m
+ export class ApiError extends Error {[m
+   status;[m
+   constructor(message, status) {[m
+[1mdiff --git a/shuleni-frontend/vite.config.js b/shuleni-frontend/vite.config.js[m
+[1mindex b144e58..6b1d606 100644[m
+[1m--- a/shuleni-frontend/vite.config.js[m
+[1m+++ b/shuleni-frontend/vite.config.js[m
+[36m@@ -19,7 +19,7 @@[m [mexport default defineConfig({[m
+   // import.meta.env — this is what lets api.js work identically under Vite (browser)[m
+   // and Jest (Node/CommonJS), where `import.meta` isn't valid syntax.[m
+   define: {[m
+[31m-    __API_BASE_URL__: JSON.stringify(process.env.VITE_API_URL || 'http://localhost:4000/api'),[m
+[32m+[m[32m    __API_BASE_URL__: JSON.stringify(process.env.VITE_API_URL || 'http://localhost:5000'),[m
+   },[m
+   server: {[m
+     host: '0.0.0.0',[m
